@@ -1,9 +1,18 @@
-
 .neon-text {
-    text-shadow: 0 0 5px cyan, 0 0 20px cyan, 0 0 40px cyan, 0 0 80px cyan;
+    text-shadow: 0 0 10px cyan, 0 0 20px cyan, 0 0 40px cyan, 0 0 80px cyan;
+    animation: flicker 1.5s infinite alternate;
   }
   
   .neon-box {
-    box-shadow: 0 0 10px cyan, 0 0 20px cyan, 0 0 30px cyan;
+    box-shadow: 0 0 20px cyan, 0 0 40px cyan, 0 0 60px cyan;
+  }
+  
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+    }
+    20%, 24%, 55% {
+      opacity: 0.4;
+    }
   }
   
