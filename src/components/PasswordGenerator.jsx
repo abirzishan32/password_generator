@@ -10,7 +10,8 @@ const PasswordGenerator = () => {
     const [numbers, setNumbers] = React.useState(true);
     const [specialChars, setSpecialChars] = React.useState(true);
     const [pronounceable, setPronounceable] = React.useState(false);
-    const [position, setPosition] = React.useState("end"); // Position for numbers/special chars
+    const [position, setPosition] = React.useState("end");
+
 
     const consonants = "bcdfghjklmnpqrstvwxyz";
     const vowels = "aeiou";
@@ -62,8 +63,8 @@ const PasswordGenerator = () => {
     };
 
     return (
-        <div className="bg-gradient-to-br from-gray-800 to-gray-700 p-8 rounded-lg shadow-xl neon-box transform hover:scale-105 transition-transform duration-300 animate-pulse">
-            <div className="mb-6">
+        <div className="bg-gradient-to-br from-gray-800 to-gray-700 p-8 rounded-lg shadow-xl neon-box transform hover:scale-105 transition-transform duration-300 animate-pulse grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col mb-6">
                 <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Password Length:</label>
                 <input
                     value={length}
@@ -74,8 +75,8 @@ const PasswordGenerator = () => {
                 />
             </div>
 
-            <div className="mb-6 flex items-center justify-between">
-                <label className="text-xl font-bold tracking-wide neon-label">Include Uppercase:</label>
+            <div className="flex flex-col mb-6">
+                <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Include Uppercase:</label>
                 <ReactSwitch
                     checked={uppercase}
                     onChange={() => setUppercase(!uppercase)}
@@ -88,8 +89,8 @@ const PasswordGenerator = () => {
                 />
             </div>
 
-            <div className="mb-6 flex items-center justify-between">
-                <label className="text-xl font-bold tracking-wide neon-label">Include Numbers:</label>
+            <div className="flex flex-col mb-6">
+                <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Include Numbers:</label>
                 <ReactSwitch
                     checked={numbers}
                     onChange={() => setNumbers(!numbers)}
@@ -101,8 +102,8 @@ const PasswordGenerator = () => {
                 />
             </div>
 
-            <div className="mb-6 flex items-center justify-between">
-                <label className="text-xl font-bold tracking-wide neon-label">Include Special Characters:</label>
+            <div className="flex flex-col mb-6">
+                <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Include Special Characters:</label>
                 <ReactSwitch
                     checked={specialChars}
                     onChange={() => setSpecialChars(!specialChars)}
@@ -114,8 +115,8 @@ const PasswordGenerator = () => {
                 />
             </div>
 
-            <div className="mb-6 flex items-center justify-between">
-                <label className="text-xl font-bold tracking-wide neon-label">Pronounceable Password:</label>
+            <div className="flex flex-col mb-6">
+                <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Pronounceable Password:</label>
                 <ReactSwitch
                     checked={pronounceable}
                     onChange={() => setPronounceable(!pronounceable)}
@@ -128,7 +129,7 @@ const PasswordGenerator = () => {
             </div>
 
             {pronounceable && (
-                <div className="mb-6">
+                <div className="flex flex-col mb-6">
                     <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Position of Numbers/Chars:</label>
                     <select
                         value={position}
@@ -141,15 +142,17 @@ const PasswordGenerator = () => {
                 </div>
             )}
 
-            <button
-                onClick={generatePassword}
-                className="w-full py-3 px-6 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-blue-500 hover:to-cyan-500 text-white font-extrabold transition-all transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-cyan-500 animate-glow hover:animate-shake"
-            >
-                Generate Password
-            </button>
+            <div className="col-span-2">
+                <button
+                    onClick={generatePassword}
+                    className="w-full py-3 px-6 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-blue-500 hover:to-cyan-500 text-white font-extrabold transition-all transform hover:scale-100 focus:outline-none focus:ring-4 focus:ring-cyan-500 animate-glow hover:animate-shake"
+                >
+                    Generate Password
+                </button>
+            </div>
 
             {password && (
-                <div className="relative mt-6 p-4 rounded-md border-4 border-cyan-500 bg-gray-800 text-cyan-300 text-center text-2xl font-bold shadow-lg neon-text">
+                <div className="relative col-span-2 mt-6 p-4 rounded-md border-4 border-cyan-500 bg-gray-800 text-cyan-300 text-center text-2xl font-bold shadow-lg neon-text">
                     <p className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent animate-glow">
                         {password}
                     </p>
