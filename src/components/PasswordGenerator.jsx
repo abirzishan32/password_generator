@@ -3,7 +3,7 @@ import ReactSwitch from 'react-switch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons';
 
-const PasswordGenerator = () => {
+const PasswordGenerator = ({ addToHistory }) => {
     const [password, setPassword] = React.useState("");
     const [length, setLength] = React.useState(8);
     const [uppercase, setUppercase] = React.useState(true);
@@ -11,7 +11,6 @@ const PasswordGenerator = () => {
     const [specialChars, setSpecialChars] = React.useState(true);
     const [pronounceable, setPronounceable] = React.useState(false);
     const [position, setPosition] = React.useState("end");
-
 
     const consonants = "bcdfghjklmnpqrstvwxyz";
     const vowels = "aeiou";
@@ -22,7 +21,7 @@ const PasswordGenerator = () => {
         let generatePass = '';
 
         if (pronounceable) {
-            for (let i = 0; i < length - 4; i += 2) { // Allocate space for numbers/special chars
+            for (let i = 0; i < length - 4; i += 2) {
                 const consonant = consonants[Math.floor(Math.random() * consonants.length)];
                 const vowel = vowels[Math.floor(Math.random() * vowels.length)];
                 generatePass += consonant + vowel;
@@ -32,11 +31,10 @@ const PasswordGenerator = () => {
             if (numbers) extraChars += nums[Math.floor(Math.random() * nums.length)];
             if (specialChars) extraChars += symbols[Math.floor(Math.random() * symbols.length)];
 
-            // Add extra characters to the start or end of the password based on position
             generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
 
             if (generatePass.length > length) {
-                generatePass = generatePass.slice(0, length);  // Truncate to the desired length
+                generatePass = generatePass.slice(0, length);
             }
         } else {
             const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -55,6 +53,7 @@ const PasswordGenerator = () => {
         }
 
         setPassword(generatePass);
+        addToHistory(generatePass);
     };
 
     const copyToClipboard = () => {
