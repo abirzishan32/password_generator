@@ -3,7 +3,7 @@ import React from 'react';
 const PasswordHistory = ({ history }) => {
 
 
-    // Export history as CSV
+
     const exportAsCSV = () => {
         const csvContent = "data:text/csv;charset=utf-8," +
             history.map(p => `"${p}"`).join("\n");
@@ -17,7 +17,7 @@ const PasswordHistory = ({ history }) => {
         document.body.removeChild(link);
     };
 
-    // Export history as JSON
+
     const exportAsJSON = () => {
         const jsonContent = JSON.stringify(history, null, 2);
         const blob = new Blob([jsonContent], { type: "application/json" });

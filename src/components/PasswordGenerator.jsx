@@ -19,42 +19,51 @@ const PasswordGenerator = ({ addToHistory }) => {
 
     const generatePassword = () => {
         let generatePass = '';
-
+    
         if (pronounceable) {
+
             for (let i = 0; i < length - 4; i += 2) {
                 const consonant = consonants[Math.floor(Math.random() * consonants.length)];
                 const vowel = vowels[Math.floor(Math.random() * vowels.length)];
                 generatePass += consonant + vowel;
             }
-
+    
             let extraChars = '';
             if (numbers) extraChars += nums[Math.floor(Math.random() * nums.length)];
             if (specialChars) extraChars += symbols[Math.floor(Math.random() * symbols.length)];
-
+    
             generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
+    
 
-            if (generatePass.length > length) {
+            if (generatePass.length < length) {
+                const remainingLength = length - generatePass.length;
+                const availableChars = (numbers ? nums : '') + (specialChars ? symbols : '');
+                for (let i = 0; i < remainingLength; i++) {
+                    generatePass += availableChars[Math.floor(Math.random() * availableChars.length)];
+                }
+            } else if (generatePass.length > length) {
                 generatePass = generatePass.slice(0, length);
             }
         } else {
             const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const lower = 'abcdefghijklmnopqrstuvwxyz';
-
+    
             let validChars = lower;
-
+    
             if (uppercase) validChars += upper;
             if (numbers) validChars += nums;
             if (specialChars) validChars += symbols;
-
+    
             for (let i = 0; i < length; i++) {
                 const randomIndex = Math.floor(Math.random() * validChars.length);
                 generatePass += validChars[randomIndex];
             }
         }
-
+    
         setPassword(generatePass);
         addToHistory(generatePass);
     };
+    
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(password);
@@ -84,7 +93,7 @@ const PasswordGenerator = ({ addToHistory }) => {
                     handleDiameter={28}
                     offColor="#2D3748"
                     onColor="#38B2AC"
-                    disabled={pronounceable} // Disable when pronounceable password is selected
+                    disabled={pronounceable} 
                 />
             </div>
 

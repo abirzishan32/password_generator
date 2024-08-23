@@ -9,7 +9,6 @@ const PasswordStrengthChecker = () => {
     const newPassword = e.target.value;
     setPassword(newPassword);
 
-    // Calculate password strength
     const result = zxcvbn(newPassword);
     setStrength(result);
   };
