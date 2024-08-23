@@ -1,57 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactSwitch from 'react-switch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 const PasswordGenerator = () => {
-    const [password, setPassword] = useState("");
-    const [length, setLength] = useState(8);
-    const [uppercase, setUppercase] = useState(true);
-    const [numbers, setNumbers] = useState(true);
-    const [specialChars, setSpecialChars] = useState(true);
-    const [strength, setStrength] = useState("");
-    const [copied, setCopied] = useState(false);
+    const [password, setPassword] = React.useState("");
+    const [length, setLength] = React.useState(8);
+    const [uppercase, setUppercase] = React.useState(true);
+    const [numbers, setNumbers] = React.useState(true);
+    const [specialChars, setSpecialChars] = React.useState(true);
+    const [pronounceable, setPronounceable] = React.useState(false);
+    const [position, setPosition] = React.useState("end"); // Position for numbers/special chars
 
-    const calculateStrength = (generatedPassword) => {
-        let strengthLevel = 0;
-
-        if (generatedPassword.length >= 8) strengthLevel++;
-        if (/[A-Z]/.test(generatedPassword)) strengthLevel++;
-        if (/[0-9]/.test(generatedPassword)) strengthLevel++;
-        if (/[^a-zA-Z0-9]/.test(generatedPassword)) strengthLevel++;
-
-        if (strengthLevel <= 1) setStrength("Weak");
-        else if (strengthLevel === 2) setStrength("Medium");
-        else if (strengthLevel >= 3) setStrength("Strong");
-    };
+    const consonants = "bcdfghjklmnpqrstvwxyz";
+    const vowels = "aeiou";
+    const nums = "0123456789";
+    const symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
     const generatePassword = () => {
-        const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const lower = 'abcdefghijklmnopqrstuvwxyz';
-        const nums = '0123456789';
-        const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-        let validChars = lower;
-
-        if (uppercase) validChars += upper;
-        if (numbers) validChars += nums;
-        if (specialChars) validChars += symbols;
-
         let generatePass = '';
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * validChars.length);
-            generatePass += validChars[randomIndex];
+
+        if (pronounceable) {
+            for (let i = 0; i < length - 4; i += 2) { // Allocate space for numbers/special chars
+                const consonant = consonants[Math.floor(Math.random() * consonants.length)];
+                const vowel = vowels[Math.floor(Math.random() * vowels.length)];
+                generatePass += consonant + vowel;
+            }
+
+            let extraChars = '';
+            if (numbers) extraChars += nums[Math.floor(Math.random() * nums.length)];
+            if (specialChars) extraChars += symbols[Math.floor(Math.random() * symbols.length)];
+
+            // Add extra characters to the start or end of the password based on position
+            generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
+
+            if (generatePass.length > length) {
+                generatePass = generatePass.slice(0, length);  // Truncate to the desired length
+            }
+        } else {
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+
+            let validChars = lower;
+
+            if (uppercase) validChars += upper;
+            if (numbers) validChars += nums;
+            if (specialChars) validChars += symbols;
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * validChars.length);
+                generatePass += validChars[randomIndex];
+            }
         }
 
         setPassword(generatePass);
-        calculateStrength(generatePass);
-        setCopied(false); // Reset the copied state after generating a new password
     };
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(password);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Hide the message after 2 seconds
+        alert("Copied!");
     };
 
     return (
@@ -77,6 +84,7 @@ const PasswordGenerator = () => {
                     handleDiameter={28}
                     offColor="#2D3748"
                     onColor="#38B2AC"
+                    disabled={pronounceable} // Disable when pronounceable password is selected
                 />
             </div>
 
@@ -106,6 +114,33 @@ const PasswordGenerator = () => {
                 />
             </div>
 
+            <div className="mb-6 flex items-center justify-between">
+                <label className="text-xl font-bold tracking-wide neon-label">Pronounceable Password:</label>
+                <ReactSwitch
+                    checked={pronounceable}
+                    onChange={() => setPronounceable(!pronounceable)}
+                    height={28}
+                    width={56}
+                    handleDiameter={28}
+                    offColor="#2D3748"
+                    onColor="#38B2AC"
+                />
+            </div>
+
+            {pronounceable && (
+                <div className="mb-6">
+                    <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Position of Numbers/Chars:</label>
+                    <select
+                        value={position}
+                        onChange={(e) => setPosition(e.target.value)}
+                        className="w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-4 focus:ring-cyan-500 transition-shadow duration-300 glow-input"
+                    >
+                        <option value="start">Start</option>
+                        <option value="end">End</option>
+                    </select>
+                </div>
+            )}
+
             <button
                 onClick={generatePassword}
                 className="w-full py-3 px-6 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-blue-500 hover:to-cyan-500 text-white font-extrabold transition-all transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-cyan-500 animate-glow hover:animate-shake"
@@ -114,26 +149,16 @@ const PasswordGenerator = () => {
             </button>
 
             {password && (
-                <div className="mt-6 p-4 rounded-md border-4 border-cyan-500 bg-gray-800 text-cyan-300 text-center text-2xl font-bold shadow-lg neon-text">
-                    <p className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent animate-glow">{password}
-                        <FontAwesomeIcon
-                            icon={faClipboard}
-                            className="text-cyan-300 cursor-pointer hover:text-cyan-500 ml-20 transition-all transform hover:scale-110"
-                            onClick={copyToClipboard}
-                            title="Copy to Clipboard"
-                        />
+                <div className="relative mt-6 p-4 rounded-md border-4 border-cyan-500 bg-gray-800 text-cyan-300 text-center text-2xl font-bold shadow-lg neon-text">
+                    <p className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent animate-glow">
+                        {password}
                     </p>
-
-                </div>
-            )}
-
-
-
-
-
-            {copied && (
-                <div className="mt-2 text-cyan-300 font-bold text-center animate-bounce">
-                    Copied!
+                    <FontAwesomeIcon
+                        icon={faClipboard}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-cyan-300 cursor-pointer hover:text-cyan-500 transition-all hover:scale-110"
+                        onClick={copyToClipboard}
+                        title="Copy to Clipboard"
+                    />
                 </div>
             )}
         </div>
