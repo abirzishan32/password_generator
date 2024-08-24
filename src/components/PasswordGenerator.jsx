@@ -32,13 +32,8 @@ const PasswordGenerator = ({ addToHistory }) => {
             let extraChars = '';
             if (numbers) extraChars += nums[Math.floor(Math.random() * nums.length)];
             if (specialChars) extraChars += symbols[Math.floor(Math.random() * symbols.length)];
-
-            if(position === 'start'){
-                generatePass = extraChars + generatePass;
-            }
-            else generatePass += extraChars;
     
-            // generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
+            generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
     
 
             if (generatePass.length < length) {
