@@ -11,6 +11,7 @@ const PasswordGenerator = ({ addToHistory }) => {
     const [specialChars, setSpecialChars] = React.useState(true);
     const [pronounceable, setPronounceable] = React.useState(false);
     const [position, setPosition] = React.useState("end");
+    const [copied, setCopied] = React.useState(false);
 
     const consonants = "bcdfghjklmnpqrstvwxyz";
     const vowels = "aeiou";
@@ -31,8 +32,13 @@ const PasswordGenerator = ({ addToHistory }) => {
             let extraChars = '';
             if (numbers) extraChars += nums[Math.floor(Math.random() * nums.length)];
             if (specialChars) extraChars += symbols[Math.floor(Math.random() * symbols.length)];
+
+            if(position === 'start'){
+                generatePass = extraChars + generatePass;
+            }
+            else generatePass += extraChars;
     
-            generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
+            // generatePass = position === 'start' ? extraChars + generatePass : generatePass + extraChars;
     
 
             if (generatePass.length < length) {
@@ -65,13 +71,20 @@ const PasswordGenerator = ({ addToHistory }) => {
     };
     
 
+
     const copyToClipboard = () => {
         navigator.clipboard.writeText(password);
-        alert("Copied!");
+        setCopied(true);
+
+        setTimeout(() => {
+            setCopied(false);
+        }, 3000);
     };
 
     return (
+
         <div className="bg-gradient-to-br from-gray-800 to-gray-700 p-8 rounded-lg shadow-xl neon-box transform hover:scale-105 transition-transform duration-300 animate-pulse grid grid-cols-1 md:grid-cols-2 gap-6">
+            
             <div className="flex flex-col mb-6">
                 <label className="block text-xl font-bold mb-2 tracking-wide neon-label">Password Length:</label>
                 <input
@@ -170,10 +183,13 @@ const PasswordGenerator = ({ addToHistory }) => {
                         onClick={copyToClipboard}
                         title="Copy to Clipboard"
                     />
+                    {copied && <div className="copied-message">Copied!</div>}
                 </div>
             )}
         </div>
+
     );
+    
 };
 
 export default PasswordGenerator;

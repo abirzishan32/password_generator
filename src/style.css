@@ -46,4 +46,24 @@
     transform: translate(-50%, -50%) scale(1.4);
   }
   
+
+  .copied-message {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+  @media (max-width: 768px) {
+    .neon-text {
+      font-size: 1.5rem; 
+    }
   
+    .bg-gray-900 {
+      background-color: #1a202c; 
+    }
+  }
+  
+  .mobile-menu {
+    @apply md:hidden;
+  }
