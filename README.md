@@ -4,6 +4,9 @@
 
 "Cipher Craft" is a React-based tool for generating secure and customizable passwords. It allows users to create passwords with various characteristics, including length, uppercase letters, numbers, special characters, and pronounceability. The app also includes features like copying the generated password to the clipboard and a history of generated passwords.
 
+## Project Preview
+Go to this [link](https://www.youtube.com/watch?v=Dm4jynKR3-o) for the project preview.
+
 ## Tech Stack
 
 - **Frontend**: 
